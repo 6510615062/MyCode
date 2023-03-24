@@ -20,7 +20,7 @@ def plot(data, weights):
     plt.xlabel("weight (kg)")
 
     x = np.linspace(0, 200, 100)
-    y = (-weights[0] - weights[2] * x) / weights[1]
+    y = (-(weights[0]) - (weights[2] * x)) / weights[1]
     plt.plot(x, y, "-r")
 
     plt.plot(OWlist, OHlist, "ro", UWlist, UHlist, "bo")
@@ -65,7 +65,8 @@ def train(data, weights, lr):
 
     dotlist = predict(data, weights)
     index_contain = accuracy(data, dotlist)
-
+    print(f"weights : {weights}")
+    plot(data, weights)
     if len(index_contain) > 0:
         x0 = data[index_contain[0]][0]
         x1 = data[index_contain[0]][1]
@@ -76,6 +77,7 @@ def train(data, weights, lr):
         new_weights.append(update(weights[0], lr, d, x0))
         new_weights.append(update(weights[1], lr, d, x1))
         new_weights.append(update(weights[2], lr, d, x2))
+
         return new_weights
     else:
         weights.append(0)
@@ -85,20 +87,27 @@ def train(data, weights, lr):
 ## using i = 1 for over and i = 0 for under
 ## bias height weight i
 def main():
-    data = [[1, 150, 80, 1], [1, 170, 60, 0], [1, 130, 70, 1], [1, 178, 50, 0]]
+    data = [
+        [1, 150, 80, 1],
+        [1, 170, 60, 0],
+        [1, 130, 70, 1],
+        [1, 178, 50, 0],
+        [1, 145, 70, 1],
+        [1, 155, 48, 0],
+    ]
     weights = [0.2, 0.4, 0.8]
     learning_rate = 0.2
 
     n_weights = []
-
+    count = 0
     while True:
+        print(f"updated {count} times")
+        count += 1
         n_weights = train(data, weights, learning_rate)
         if len(n_weights) > 3:
             break
         else:
             weights = n_weights
-
-    plot(data, n_weights)
 
 
 main()
